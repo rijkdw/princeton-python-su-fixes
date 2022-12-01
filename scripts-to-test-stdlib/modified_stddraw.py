@@ -128,10 +128,6 @@ def _factorX(w):
 def _factorY(h):
     return h * _canvasHeight / abs(_ymax - _ymin)
 
-def _print(*args, **kwargs):
-    print(*args, **kwargs)
-    pass
-
 #-----------------------------------------------------------------------
 # Begin added by Alan J. Broder
 #-----------------------------------------------------------------------

@@ -9,6 +9,7 @@ The stdaudio module defines functions related to audio.
 import sys
 import numpy
 import pygame
+import stdio
 
 #-----------------------------------------------------------------------
 
