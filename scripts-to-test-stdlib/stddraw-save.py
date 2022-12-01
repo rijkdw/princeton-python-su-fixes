@@ -1,6 +1,6 @@
 import sys
-
 import modified_stddraw as stddraw
+# import stddraw
 
 
 for i in range(int(sys.argv[1])):

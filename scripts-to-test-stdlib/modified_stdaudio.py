@@ -48,7 +48,7 @@ def playSample(s):
         for sample in _myBuffer:
             temp.append(numpy.int16(sample * float(0x7fff)))
         samples = numpy.array(temp, numpy.int16)
-        if sys.platform == "windows":  # Perhaps another check is necessary in Jan Mouton etc -- Rijk
+        if sys.platform == "win32":  # Perhaps another check is necessary in Jan Mouton etc -- Rijk
             samples = numpy.vstack([samples, samples]).T.copy(order='C')  # Make it two-channel -- Rijk
         sound = pygame.sndarray.make_sound(samples)
         wait()
@@ -111,7 +111,7 @@ def read(f):
     fileName = f + '.wav'
     sound = pygame.mixer.Sound(fileName)
     samples = pygame.sndarray.samples(sound)
-    if sys.platform == "windows":              # Perhaps another check is necessary in Jan Mouton etc -- Rijk
+    if sys.platform == "win32":              # Perhaps another check is necessary in Jan Mouton etc -- Rijk
         samples = numpy.mean(samples, axis=1)  # Average them out to make it mono -- Rijk
     temp = []
     for i in range(len(samples)):

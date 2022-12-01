@@ -128,10 +128,6 @@ def _factorX(w):
 def _factorY(h):
     return h * _canvasHeight / abs(_ymax - _ymin)
 
-def _print(*args, **kwargs):
-    print(*args, **kwargs)
-    pass
-
 #-----------------------------------------------------------------------
 # Begin added by Alan J. Broder
 #-----------------------------------------------------------------------
@@ -610,68 +606,36 @@ def _saveToFile():
     incompatible with Pygame. So the dialog boxes must be displayed
     from child processes.
     """
-
     import subprocess
     _makeSureWindowCreated()
 
     stddrawPath = os.path.realpath(__file__)
 
-    # This procedure is garbage; it doesn't actually capture the desired file name -- Rijk
-    # ------- Begin garbage procedure ---------
-    # childProcess = subprocess.Popen(
-    #     [sys.executable, stddrawPath, 'getFileName'],
-    #     stdout=subprocess.PIPE)
-    # so, se = childProcess.communicate()
-    # fileName = so.strip()
-    # if sys.hexversion >= 0x03000000:
-    #     fileName = fileName.decode('utf-8')
-    # ------- End garbage procedure ---------
+    childProcess = subprocess.Popen(
+        [sys.executable, stddrawPath, 'getFileName'],
+        stdout=subprocess.PIPE)
+    so, se = childProcess.communicate()
+    fileName = so.strip()
 
-    # A file picker function.  Can be modified to use other GUIs etc if desired.
-    # Just remember to return a string (or None if the file save procedure is cancelled) -- Rijk
-    # ------- Begin file picker function ---------
-    def getFileName():
-        root = Tkinter.Tk()
-        root.withdraw()
-        root.file = tkFileDialog.asksaveasfile(mode='w')
-        root.destroy()
-        try:
-            return str(root.file.name)
-        except AttributeError:
-            return None
-    # ------- End file picker function ---------
+    if sys.hexversion >= 0x03000000:
+        fileName = fileName.decode('utf-8')
 
-    # Call the file picker function to get a file name.
-    fileName = getFileName()
-    if fileName == None:
-        return
     if fileName == '':
         return
 
     if not fileName.endswith(('.jpg', '.png')):
         childProcess = subprocess.Popen(
             [sys.executable, stddrawPath, 'reportFileSaveError',
-            'File name must end with ".jpg" or ".png".'],
-            #stdout=subprocess.DEVNULL,
-            #stderr=subprocess.STDOUT
-        )
+            'File name must end with ".jpg" or ".png".'])
         return
 
     try:
         save(fileName)
         childProcess = subprocess.Popen(
-            [sys.executable, stddrawPath, 'confirmFileSave'],
-            #stdout=subprocess.DEVNULL,
-            #stderr=subprocess.STDOUT
-        )
+            [sys.executable, stddrawPath, 'confirmFileSave'])
     except (pygame.error) as e:
         childProcess = subprocess.Popen(
-            [sys.executable, stddrawPath, 'reportFileSaveError', str(e)],
-            #stdout=subprocess.DEVNULL,
-            #stderr=subprocess.STDOUT
-        )
-
-    # childProcess.kill()
+            [sys.executable, stddrawPath, 'reportFileSaveError', str(e)])
 
 def _checkForEvents():
     """
@@ -803,7 +767,6 @@ def _getFileName():
     reply = tkFileDialog.asksaveasfilename(initialdir='.')
     sys.stdout.write(reply)
     sys.stdout.flush()
-    root.destroy()
     sys.exit()
 
 def _confirmFileSave():

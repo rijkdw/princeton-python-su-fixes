@@ -1,12 +1,5 @@
-import sys
-if sys.platform == "windows":
-    sys.path.append("H:\stdlib\libs")
-else:
-    sys.path.append("../libs")
-
 import modified_stdaudio as stdaudio
 import stdarray
-
 import math
 
 
